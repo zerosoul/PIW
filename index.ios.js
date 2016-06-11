@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import LoadingScreen from './LoadingScreen.js';
 import Swiper from './Swiper.js';
+var ShakeEvent = require('react-native-shake-event-ios');
 var RandManager = require('./RandManager.js');
 const NUM_WALLPAPERS = 5;
 class PIW extends Component {
@@ -19,6 +20,12 @@ class PIW extends Component {
       wallsJSON:[],
       isLoading:true
     };
+  }
+  componentWillMount(){
+    ShakeEvent.addEventListener('shake',()=>{
+      this.initialize();
+      this.fetchWallsJSON();  
+    });
   }
   componentDidMount(){
     this.fetchWallsJSON();
@@ -31,13 +38,13 @@ class PIW extends Component {
       return this.renderResults();
     }
   }
-renderResults(){
-  var {wallsJSON} = this.state;
-  return(
-      <Swiper data={wallsJSON}>
-      </Swiper>
+  renderResults(){
+    var {wallsJSON} = this.state;
+    return(
+        <Swiper data={wallsJSON}>
+        </Swiper>
       );
-}
+  }
   fetchWallsJSON(){
     var url = 'http://unsplash.it/list';
     fetch(url)
@@ -55,7 +62,15 @@ renderResults(){
           isLoading:false
         });
       })
-    .catch( error => console.log('获取数据有误：' + error) );
+      .catch( error => console.log('获取数据有误：' + error) );
+  }
+  initialize() {
+    this.setState({
+      wallsJSON: [],
+      isLoading: true,
+      isWaitingVisible: false
+    });
+    this.currentWallIndex = 0;
   }
 }
 
