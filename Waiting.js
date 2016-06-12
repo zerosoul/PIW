@@ -32,7 +32,7 @@ export default class Waiting extends Component {
             color={'#fff'}
             size={'large'} 
             style={{margin:15}} />
-        <Text style={{color:'#fff'}}>请稍后...</Text>
+        <Text style={{color:'#fff'}}>正在保存，请稍后...</Text>
         </View> 
       );
     } else {

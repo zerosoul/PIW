@@ -8,23 +8,29 @@ import {
 	PanResponder,
 	CameraRoll,
 	AlertIOS
-
 } from 'react-native';
 import Waiting from './Waiting.js';
 import Utils from './Utils.js';
+import HomeMask from './Mask.js';
 var SwiperView = require('react-native-swiper');
 var NetworkImage = require('react-native-image-progress');
 var Progress = require('react-native-progress');
 var {width,height} = Dimensions.get('window');
 const DOUBLE_TAP_DELAY = 300; // milliseconds
-const DOUBLE_TAP_RADIUS = 20;
+const DOUBLE_TAP_RADIUS=20;
+const LONGPRESS_DELAY=500;
+var hold_timeout_id=0;
 export default class Swiper extends Component{
 	constructor(props) {
 	  super(props);
 	
 	  this.state = {
-	  	isWaitingVisible:false
+	  	isWaitingVisible:false,
+	  	viewOpacity:1,
+	      isShowHome:false,
+	      isShowLock:false
 	  };
+	  this.onlyClick=true;
 	  this.wallsJSON=[];
 	  this.currentWallIndex = 0;
 	  this.prevTouchInfo = {
@@ -34,6 +40,7 @@ export default class Swiper extends Component{
 	};
 	  this.imagePanResponder = {};
 	  this.handlePanResponderGrant = this.handlePanResponderGrant.bind(this);
+	  this.handlePanResponderMove=this.handlePanResponderMove.bind(this);
 	  this.handlePanResponderEnd= this.handlePanResponderEnd.bind(this);
 	  this.onMomentumScrollEnd = this.onMomentumScrollEnd.bind(this);
 	}
@@ -41,6 +48,7 @@ export default class Swiper extends Component{
 	    this.imagePanResponder = PanResponder.create({
 	      onStartShouldSetPanResponder: this.handleStartShouldSetPanResponder,
 	      onPanResponderGrant: this.handlePanResponderGrant,
+	      onPanResponderMove:this.handlePanResponderMove,
 	      onPanResponderRelease: this.handlePanResponderEnd,
 	      onPanResponderTerminate: this.handlePanResponderEnd
 	    });
@@ -61,18 +69,61 @@ export default class Swiper extends Component{
 		console.log("手指触摸到屏幕啦~~~");
 		var currentTouchTimeStamp = Date.now();
 
-		if( this.isDoubleTap(currentTouchTimeStamp, gestureState) ) 
-		  this.saveCurrentWallpaperToCameraRoll();
+		if( this.isDoubleTap(currentTouchTimeStamp, gestureState) ){
+	      // console.log("double tap detected");
+	      AlertIOS.alert(
+	      '喜欢这张？',
+	      '保存到相册吧！',
+	      [
+	        {text:'不了',onPress:()=>{
+	          console.log('cancel pressed');
+	          return ;
+	      },style:"cancel"},
+	        {text:'好的',onPress:()=>{
+	          this.saveCurrentWallpaperToCameraRoll();
+	        }},
+	      ]);
+	    } 
 
 		this.prevTouchInfo = {
 		  X: gestureState.x0,
 		  Y: gestureState.y0,
 		  timeStamp: currentTouchTimeStamp
 		};
+		hold_timeout_id=setTimeout(()=>{
+		  if(this.onlyClick){
+		    console.log("long press");
+		    var isLeft=Utils.isLeft(width,gestureState.x0);
+		    console.log(isLeft);
+		    this.setState({
+		      isShowHome:isLeft,
+		      isShowLock:!isLeft,
+		      viewOpacity:0
+		    });
+		  }
+		 
+		},LONGPRESS_DELAY);
 	}
-
+	handlePanResponderMove(){
+	    console.log("moving...");
+	    this.onlyClick=false;
+	  }
 	handlePanResponderEnd(){
-		console.log("手指离开屏幕啦~~~");
+		var currTimestamp=Date.now();
+	    var {timeStamp} = this.prevTouchInfo;
+	    var dt=currTimestamp-timeStamp;
+	    var currState=this.state.viewOpacity;
+	    this.setState({viewOpacity:1});
+	    if(dt<LONGPRESS_DELAY && this.onlyClick){
+	      console.log("is click");
+	      this.setState({viewOpacity:currState?0:1});
+	    }
+	    this.onlyClick=true;
+	    this.setState({
+	      isShowHome:false,
+	      isShowLock:false
+	    })
+	    clearTimeout(hold_timeout_id);
 	}
 	isDoubleTap(currentTouchTimeStamp, {x0, y0}) {
 	  var {X, Y, timeStamp} = this.prevTouchInfo;
@@ -104,7 +155,7 @@ export default class Swiper extends Component{
 	}
 	render(){
 		var {data} = this.props;
-		var {isWaitingVisible} = this.state;
+		var {isWaitingVisible,viewOpacity,isShowHome,isShowLock} = this.state;
 		this.wallsJSON=data;
 		return(
 			<View>
@@ -118,7 +169,7 @@ export default class Swiper extends Component{
 	            marginRight: 3, 
 	            marginTop: 3, 
 	            marginBottom: 3,
-	            // opacity:viewOpacity
+	            opacity:viewOpacity
 	          }} />}
 
 	          activeDot={<View style={{
@@ -128,7 +179,7 @@ export default class Swiper extends Component{
 	            borderRadius: 7, 
 	            marginLeft: 7, 
 	            marginRight: 7,
-	            // opacity:viewOpacity
+	            opacity:viewOpacity
 	          }} />}
 	          loop={false}
 
@@ -138,7 +189,7 @@ export default class Swiper extends Component{
 			        return(
 			          <View key={index}>
 	                  <NetworkImage
-	                    source={{uri:`https://unsplash.it/${wallpaper.width}/${wallpaper.height}?image=${wallpaper.id}`}}
+	                    source={{uri:`https://unsplash.it/${wallpaper.width/2}/${wallpaper.height/2}?image=${wallpaper.id}`}}
 	                    indicator={Progress.Circle}
 	                    indicatorProps={{
 	                    	color:'rgba(255,255,255,0.8)',
@@ -148,8 +199,10 @@ export default class Swiper extends Component{
 	                    style={styles.wallpaperImage}
 	                    {...this.imagePanResponder.panHandlers}
 	                    >
+	                    <View style={{opacity:viewOpacity}}>
 	                     <Text style={styles.label}>Photo by</Text>
    						 <Text style={styles.label_author_name}>{wallpaper.author}</Text>
+   						 </View>
 	                  </NetworkImage>
 	                  
 	                </View>
@@ -157,6 +210,7 @@ export default class Swiper extends Component{
 			      })}
 			</SwiperView>
 			<Waiting width={width} height={height} isVisible={isWaitingVisible} />
+			<HomeMask isHome={isShowHome} isLock={isShowLock}/>
 			</View>
 			);
 	}

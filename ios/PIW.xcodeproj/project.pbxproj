@@ -24,6 +24,7 @@
 		4BB0F1D01D0AD985009321A5 /* libART.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BB0F1CF1D0AD954009321A5 /* libART.a */; };
 		4BB0F1D71D0B1C76009321A5 /* libRCTCameraRoll.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BB0F1D61D0B1C6B009321A5 /* libRCTCameraRoll.a */; };
 		4BB0F1DE1D0C3323009321A5 /* libRNShakeEvent.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BB0F1DD1D0C331D009321A5 /* libRNShakeEvent.a */; };
+		4BB0F1E11D0D0A42009321A5 /* DeviceUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BB0F1E01D0D0A42009321A5 /* DeviceUtil.m */; };
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
 /* End PBXBuildFile section */
 
@@ -151,6 +152,8 @@
 		4BB0F1CA1D0AD953009321A5 /* ART.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ART.xcodeproj; path = "../node_modules/react-native/Libraries/ART/ART.xcodeproj"; sourceTree = "<group>"; };
 		4BB0F1D11D0B1C6B009321A5 /* RCTCameraRoll.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTCameraRoll.xcodeproj; path = "../node_modules/react-native/Libraries/CameraRoll/RCTCameraRoll.xcodeproj"; sourceTree = "<group>"; };
 		4BB0F1D81D0C331D009321A5 /* RNShakeEvent.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNShakeEvent.xcodeproj; path = "../node_modules/react-native-shake-event-ios/RNShakeEvent.xcodeproj"; sourceTree = "<group>"; };
+		4BB0F1DF1D0D0A42009321A5 /* DeviceUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DeviceUtil.h; path = "../node_modules/react-native-device/DeviceUtil.h"; sourceTree = "<group>"; };
+		4BB0F1E01D0D0A42009321A5 /* DeviceUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DeviceUtil.m; path = "../node_modules/react-native-device/DeviceUtil.m"; sourceTree = "<group>"; };
 		78C398B01ACF4ADC00677621 /* RCTLinking.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTLinking.xcodeproj; path = "../node_modules/react-native/Libraries/LinkingIOS/RCTLinking.xcodeproj"; sourceTree = "<group>"; };
 		832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTText.xcodeproj; path = "../node_modules/react-native/Libraries/Text/RCTText.xcodeproj"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -262,6 +265,8 @@
 		13B07FAE1A68108700A75B9A /* PIW */ = {
 			isa = PBXGroup;
 			children = (
+				4BB0F1DF1D0D0A42009321A5 /* DeviceUtil.h */,
+				4BB0F1E01D0D0A42009321A5 /* DeviceUtil.m */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
@@ -635,6 +640,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4BB0F1E11D0D0A42009321A5 /* DeviceUtil.m in Sources */,
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 			);
