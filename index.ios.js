@@ -9,7 +9,6 @@ import {
 } from 'react-native';
 import LoadingScreen from './LoadingScreen.js';
 import Swiper from './Swiper.js';
-var DeviceInfo = require('react-native-device');
 var ShakeEvent = require('react-native-shake-event-ios');
 var RandManager = require('./RandManager.js');
 const NUM_WALLPAPERS = 5;
@@ -21,7 +20,7 @@ class PIW extends Component {
       wallsJSON:[],
       isLoading:true
     };
-    this.Model=DeviceInfo.model;
+    
   }
   componentWillMount(){
     ShakeEvent.addEventListener('shake',()=>{
@@ -30,7 +29,6 @@ class PIW extends Component {
     });
   }
   componentDidMount(){
-    console.log("model:"+this.Model);
     this.fetchWallsJSON();
   }
   render() {

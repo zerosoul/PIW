@@ -10,33 +10,66 @@ import {
 	Dimensions,
 	StyleSheet
 } from 'react-native';
+import Utils from './Utils.js';
+
 const {width,height}=Dimensions.get('window');
 export default class HomeMask extends Component{
 	constructor(props) {
 	    super(props);
 	    // this.state={isHome:false,isLock:false};
+	    this.DeviceModel=Utils.getModel();
+
 	}
 	 componentWillMount() {
 	    // Animate creation
 	    LayoutAnimation.spring();
 	  }
+
 	render(){
 		var {isHome,isLock}=this.props;
+		var {homeImage,lockImage}=this.generateSourceObjs();
 		if(isHome){
 			return(
 				<View style={styles.home_container}>
-					<Image source={require('./img/ios8.png')} style={{width:width,height:height}}/>
+					<Image source={homeImage} style={{width:width,height:height}}/>
 				</View>
 				)
 		}else if(isLock){
 			return(
 					<View style={styles.home_container}>
-						<Image source={require("./img/ios7.lock.png")} style={{width:width,height:height}}/>
+						<Image source={lockImage} style={{width:width,height:height}}/>
 					</View>
 				)
 		}else{
 			return null;
 		}
+	}
+	generateSourceObjs(){
+		var homeImage={};
+		var lockImage={};
+		switch (this.DeviceModel){
+			case "6s":
+			homeImage=require('./img/ios/6s/home.png');
+			lockImage=require('./img/ios/6s/lock.png');
+			case "6":
+			homeImage=require('./img/ios/6/home.png');
+			lockImage=require('./img/ios/6/lock.png');
+			case "5s":
+			homeImage=require('./img/ios/5s/home.png');
+			lockImage=require('./img/ios/5s/lock.png');
+			case "5":
+			homeImage=require('./img/ios/5/home.png');
+			lockImage=require('./img/ios/5/lock.png');
+			default:
+			homeImage=require('./img/ios/6/home.png');
+			lockImage=require('./img/ios/6/lock.png');
+
+		}
+		return {
+			homeImage,
+			lockImage
+		}
+
 	}
 
 }

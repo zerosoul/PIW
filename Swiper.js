@@ -154,7 +154,7 @@ export default class Swiper extends Component{
 
 	}
 	render(){
-		var {data} = this.props;
+		var {data,dirName} = this.props;
 		var {isWaitingVisible,viewOpacity,isShowHome,isShowLock} = this.state;
 		this.wallsJSON=data;
 		return(
@@ -210,7 +210,7 @@ export default class Swiper extends Component{
 			      })}
 			</SwiperView>
 			<Waiting width={width} height={height} isVisible={isWaitingVisible} />
-			<HomeMask isHome={isShowHome} isLock={isShowLock}/>
+			<HomeMask isHome={isShowHome} isLock={isShowLock} />
 			</View>
 			);
 	}
