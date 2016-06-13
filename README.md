@@ -15,3 +15,6 @@ Pick Image as Wallpaper（iOS）
 # Let's rock it!
 
 `react-native run-ios`
+
+# Thanks
+- [Unsplash API](https://unsplash.it/)
