@@ -18,3 +18,10 @@ Pick Image as Wallpaper（iOS）
 
 # Thanks
 - [Unsplash API](https://unsplash.it/)
+
+# Todos
+- User Guide
+- animated it!
+- Flux it!
+- Andorid it!
+- add async storage
